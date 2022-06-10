@@ -5,9 +5,11 @@ import { nanoid } from 'nanoid'
 import '../styles/styleten.css';
 
 export default function Tenzeeeees() {
+    // Initialses the state of the dice and handles any change
     const [dice, setDice] = useState(allNewDice())
     const [tenzies, setTenzies] = useState(false)
-
+    // Checks what the value is of the first dice and then if each following dice has the same score
+    // This is to see if the user wins or not
     useEffect(() => {
         const allHeld = dice.every(die => die.isHeld)
         const firstValue = dice[0].value
@@ -17,7 +19,7 @@ export default function Tenzeeeees() {
             console.log("You Won!")
         }
     }, [dice])
-
+    // Generates a new die
     function generateNewDie() {
         return {
             value: Math.ceil(Math.random() * 3),
@@ -25,7 +27,7 @@ export default function Tenzeeeees() {
             id: nanoid()
         }
     }
-
+    // Generates new Dice
     function allNewDice() {
         const newDice = []
         for (let i = 0; i < 10; i++) {
@@ -33,7 +35,7 @@ export default function Tenzeeeees() {
         }
         return newDice
     }
-
+    // Handles the changing of the dice values
     function rollDice() {
         if(!tenzies) {
             setDice(oldDice => oldDice.map(die => {
@@ -46,7 +48,7 @@ export default function Tenzeeeees() {
             setDice(allNewDice())
         }
     }
-
+    // Handles when user clicks on dice
     function holdDice(id) {
         setDice(oldDice => oldDice.map(die => {
             return die.id === id ?
@@ -54,7 +56,7 @@ export default function Tenzeeeees() {
                 die
         }))
     }
-
+    // Creates elements to display dice
     const diceElements = dice.map(die => (
         <Die key={die.id} value={die.value} isHeld={die.isHeld} holdDice={() => holdDice(die.id)} />
     ))

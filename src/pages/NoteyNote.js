@@ -7,17 +7,18 @@ import { nanoid } from "nanoid"
 import { useState, useEffect } from "react";
 
 export default function NoteyNote() {
+    // Handles the notes and sets what is in them, either creating a new array if emtpy
     const [notes, setNotes] = useState(
         () => JSON.parse(localStorage.getItem("notes")) || []
     )
     const [currentNoteId, setCurrentNoteId] = useState(
         (notes[0] && notes[0].id) || ""
     )
-    
+    // STores the note on local storage
     useEffect(() => {
         localStorage.setItem("notes", JSON.stringify(notes))
     }, [notes])
-    
+    // Hnadles the creation of new notes
     function createNewNote() {
         const newNote = {
             id: nanoid(),
@@ -26,9 +27,9 @@ export default function NoteyNote() {
         setNotes(prevNotes => [newNote, ...prevNotes])
         setCurrentNoteId(newNote.id)
     }
-    
+    // Handles the updating of notes
     function updateNote(text) {
-        // Put the most recently-modified note at the top
+        // Puts the most recently-modified note at the top
         setNotes(oldNotes => {
             const newArray = []
             for(let i = 0; i < oldNotes.length; i++) {
@@ -42,24 +43,12 @@ export default function NoteyNote() {
             return newArray
         })
     }
-    
-    /**
-     * Challenge: complete and implement the deleteNote function
-     * 
-     * Hints: 
-     * 1. What array method can be used to return a new
-     *    array that has filtered out an item based 
-     *    on a condition?
-     * 2. Notice the parameters being based to the function
-     *    and think about how both of those parameters
-     *    can be passed in during the onClick event handler
-     */
-    
+    // Handles the deletion of a note
      function deleteNote(event, noteId) {
         event.stopPropagation()
         setNotes(oldNotes => oldNotes.filter(note => note.id !== noteId))
     }
-    
+    // Finds the ID of the current note 
     function findCurrentNote() {
         return notes.find(note => {
             return note.id === currentNoteId
